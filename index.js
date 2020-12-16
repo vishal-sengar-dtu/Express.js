@@ -5,11 +5,16 @@ const members = require('./Members')
 const app = express()
 
 // init middleware
-app.use(logger)
+//app.use(logger)
 
-// get JSON
+// get member JSON
 app.get('/api/members', (req, res) => {
   res.json(members)
+})
+
+// get single member
+app.get('/api/members/:id', (req, res) => {
+  res.json(members.filter(member => member.id === parseInt(req.params.id)))
 })
 
 // set static folder
