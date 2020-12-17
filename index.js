@@ -1,5 +1,6 @@
 const express = require('express') 
 const path = require('path')
+const handler = require('express-handler')
 const logger = require('./middleware/logger')
 
 const app = express()
@@ -7,12 +8,21 @@ const app = express()
 // init middleware
 //app.use(logger)
 
+// Handlebars Middleware
+app.engine('handlebars', handler({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
+
 // Body Parser Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 // set static folder
 app.use(express.static(path.join(__dirname, "public")))
+
+// Homepage Route
+app.get('/', (req, res) => res.render('index', {
+  title: 'Member App'
+}))
 
 // Members API routes
 app.use('/api/members', require('./routes/api/members'))
